@@ -15,6 +15,10 @@ import {
   FaMapMarkerAlt,
   FaMoon,
   FaSun,
+  FaCoffee,
+  FaBriefcase,
+  FaTooth,
+  FaIdBadge,
 } from 'react-icons/fa'
 import {
   SiJavascript,
@@ -23,6 +27,7 @@ import {
   SiMongodb,
   SiExpress,
   SiFigma,
+  SiCanva,
 } from 'react-icons/si'
 import { HiMenuAlt3, HiX } from 'react-icons/hi'
 
@@ -77,6 +82,49 @@ const skills = [
   { name: 'MongoDB', icon: <SiMongodb />, color: '#47A248' },
   { name: 'Git', icon: <FaGitAlt />, color: '#F05032' },
   { name: 'Figma', icon: <SiFigma />, color: '#F24E1E' },
+]
+
+const projects = [
+  {
+    icon: <FaCoffee />,
+    title: 'POS CoffeeShop System',
+    subject: 'System Analysis & Design',
+    description:
+      'A Point-of-Sale system for a coffee shop built as a class project. I was in charge of the entire UI design, crafting clean and intuitive layouts using Canva to ensure a smooth ordering experience.',
+    tools: ['Canva', 'UI Design'],
+    color: '#6F4E37',
+    images: ['/images/pos-1.png', '/images/pos-2.png', '/images/pos-3.png'],
+  },
+  {
+    icon: <FaBriefcase />,
+    title: 'JobSeek Campus Portal',
+    subject: 'IS Project',
+    description:
+      'A prototype for a campus job-seeking website designed to connect students with opportunities. I created the full interactive prototype in Figma, focusing on user flow and modern UI patterns.',
+    tools: ['Figma', 'Prototyping', 'UI/UX'],
+    color: '#4A90D9',
+    images: ['/images/jobseek-1.png', '/images/jobseek-2.png', '/images/jobseek-3.png'],
+  },
+  {
+    icon: <FaTooth />,
+    title: 'Dental Clinic CRM System',
+    subject: 'Capstone 1',
+    description:
+      'A Customer Relationship Management system for a dental clinic to manage patients, appointments, and records. I designed the UI and assisted in frontend development using HTML and CSS.',
+    tools: ['UI Design', 'HTML', 'CSS', 'Frontend'],
+    color: '#2ECC71',
+    images: [],
+  },
+  {
+    icon: <FaIdBadge />,
+    title: 'NFC-Based Campus Entry',
+    subject: 'Capstone 2',
+    description:
+      'An NFC-powered campus entry and attendance system for streamlined access control. I was responsible for the UI design and contributed to the frontend implementation using HTML and CSS.',
+    tools: ['UI Design', 'HTML', 'CSS', 'NFC', 'Frontend'],
+    color: '#9B59B6',
+    images: ['/images/nfc-1.png', '/images/nfc-2.png', '/images/nfc-3.png'],
+  },
 ]
 
 const navLinks = ['Home', 'Skills', 'Contact']
@@ -163,9 +211,98 @@ function AnimatedBackground() {
       }
     }
 
+    /* ── Constellation definitions (normalised 0-1 coords) ── */
+    /* Libra – the scales */
+    const libraStars = [
+      { x: 0.50, y: 0.30 },  // 0  top center (balance point)
+      { x: 0.28, y: 0.50 },  // 1  left arm end
+      { x: 0.72, y: 0.50 },  // 2  right arm end
+      { x: 0.50, y: 0.60 },  // 3  center join
+      { x: 0.28, y: 0.70 },  // 4  left pan top
+      { x: 0.18, y: 0.80 },  // 5  left pan bottom-left
+      { x: 0.38, y: 0.80 },  // 6  left pan bottom-right
+      { x: 0.72, y: 0.70 },  // 7  right pan top
+      { x: 0.62, y: 0.80 },  // 8  right pan bottom-left
+      { x: 0.82, y: 0.80 },  // 9  right pan bottom-right
+    ]
+    const libraLines = [
+      [0, 1], [0, 2], [0, 3],
+      [1, 4], [4, 5], [4, 6], [5, 6],
+      [2, 7], [7, 8], [7, 9], [8, 9],
+    ]
+
+    /* Sagittarius – the archer (classic arrow/bow shape) */
+    const sagStars = [
+      { x: 0.15, y: 0.25 },  // 0  arrow tip
+      { x: 0.30, y: 0.35 },  // 1  arrow shaft
+      { x: 0.45, y: 0.45 },  // 2  arrow mid
+      { x: 0.55, y: 0.52 },  // 3  bow center (grip)
+      { x: 0.45, y: 0.35 },  // 4  bow top
+      { x: 0.45, y: 0.65 },  // 5  bow bottom
+      { x: 0.65, y: 0.60 },  // 6  body
+      { x: 0.75, y: 0.50 },  // 7  shoulder
+      { x: 0.80, y: 0.70 },  // 8  back leg
+      { x: 0.60, y: 0.78 },  // 9  front leg
+      { x: 0.70, y: 0.38 },  // 10 head
+    ]
+    const sagLines = [
+      [0, 1], [1, 2], [2, 3],  // arrow
+      [4, 3], [3, 5],          // bow
+      [3, 6], [6, 7], [7, 10], // upper body
+      [6, 8], [6, 9],          // legs
+    ]
+
+    function drawConstellation(stars, lines, offsetX, offsetY, w, h, time, baseAlpha) {
+      const pulse = 0.7 + 0.3 * Math.sin(time * 0.0008)
+      const alpha = baseAlpha * pulse
+
+      /* draw connecting lines */
+      ctx.strokeStyle = `rgba(236, 72, 153, ${alpha * 0.25})`
+      ctx.lineWidth = 1
+      ctx.setLineDash([4, 6])
+      for (const [a, b] of lines) {
+        const ax = offsetX + stars[a].x * w
+        const ay = offsetY + stars[a].y * h
+        const bx = offsetX + stars[b].x * w
+        const by = offsetY + stars[b].y * h
+        ctx.beginPath()
+        ctx.moveTo(ax, ay)
+        ctx.lineTo(bx, by)
+        ctx.stroke()
+      }
+      ctx.setLineDash([])
+
+      /* draw constellation stars */
+      for (let i = 0; i < stars.length; i++) {
+        const sx = offsetX + stars[i].x * w
+        const sy = offsetY + stars[i].y * h
+        const twinkle = 0.6 + 0.4 * Math.sin(time * 0.003 + i * 1.7)
+        const a = alpha * twinkle
+
+        /* soft glow */
+        ctx.beginPath()
+        ctx.arc(sx, sy, 6, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(236, 72, 153, ${a * 0.2})`
+        ctx.fill()
+
+        /* star dot */
+        ctx.beginPath()
+        ctx.arc(sx, sy, 2.5, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255, 230, 240, ${a})`
+        ctx.fill()
+
+        /* bright core */
+        ctx.beginPath()
+        ctx.arc(sx, sy, 1, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(255, 255, 255, ${a * 0.9})`
+        ctx.fill()
+      }
+    }
+
     function drawDark(time) {
       ctx.clearRect(0, 0, canvas.width, canvas.height)
 
+      /* draw random stars */
       for (const star of stars) {
         star.x += star.speedX
         star.y += star.speedY
@@ -199,6 +336,24 @@ function AnimatedBackground() {
           ctx.fill()
         }
       }
+
+      /* draw constellations */
+      const cw = Math.min(canvas.width * 0.28, 320)
+      const ch = cw * 0.9
+
+      /* Libra — upper-right area */
+      drawConstellation(
+        libraStars, libraLines,
+        canvas.width * 0.65, canvas.height * 0.06,
+        cw, ch, time, 0.85
+      )
+
+      /* Sagittarius — left-center area */
+      drawConstellation(
+        sagStars, sagLines,
+        canvas.width * 0.05, canvas.height * 0.32,
+        cw * 1.1, ch * 1.1, time, 0.85
+      )
     }
 
     function drawCloud(cloud) {
@@ -427,6 +582,188 @@ function Hero() {
   )
 }
 
+/* Vertical auto-slideshow for the active center card */
+function VerticalSlideshow({ images, onImageClick }) {
+  const [current, setCurrent] = useState(0)
+
+  useEffect(() => {
+    if (images.length <= 1) return
+    const timer = setInterval(() => {
+      setCurrent((c) => (c + 1) % images.length)
+    }, 3000)
+    return () => clearInterval(timer)
+  }, [images])
+
+  // reset to 0 when images change (new project selected)
+  useEffect(() => {
+    setCurrent(0)
+  }, [images])
+
+  if (images.length === 0) return null
+
+  return (
+    <div className="v-slideshow" onClick={() => onImageClick && onImageClick(current)} style={{ cursor: onImageClick ? 'pointer' : undefined }}>
+      <div
+        className="v-slideshow-track"
+        style={{ transform: `translateY(-${current * 100}%)` }}
+      >
+        {images.map((src, i) => (
+          <img key={i} src={src} alt="" className="v-slideshow-img" draggable={false} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* Carousel card: shows slideshow for active (left) or static thumbnail for next (right) */
+function CarouselCard({ project, isActive, size, animClass, onClick, onImageClick }) {
+  const hasImages = project.images && project.images.length > 0
+
+  return (
+    <div
+      className={`carousel-card carousel-${size} ${animClass}`}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => e.key === 'Enter' && onClick() : undefined}
+    >
+      {isActive && hasImages ? (
+        <VerticalSlideshow images={project.images} onImageClick={onImageClick} />
+      ) : hasImages ? (
+        <img src={project.images[0]} alt={project.title} className="carousel-thumb" draggable={false} />
+      ) : (
+        <div className="carousel-card-icon" style={{ color: project.color }}>
+          {project.icon}
+        </div>
+      )}
+      <span className="carousel-card-label">{project.title}</span>
+    </div>
+  )
+}
+
+function Projects() {
+  const [activeIdx, setActiveIdx] = useState(0)
+  const [animating, setAnimating] = useState(false)
+  const [lightbox, setLightbox] = useState(null) // { images, index }
+
+  const total = projects.length
+  const nextIdx = (activeIdx + 1) % total
+
+  const handleNext = () => {
+    if (animating) return
+    setAnimating(true)
+    setTimeout(() => {
+      setActiveIdx((prev) => (prev + 1) % total)
+      setAnimating(false)
+    }, 400)
+  }
+
+  const openLightbox = (imgIndex) => {
+    const imgs = projects[activeIdx].images
+    if (imgs && imgs.length > 0) {
+      setLightbox({ images: imgs, index: imgIndex })
+    }
+  }
+
+  const closeLightbox = () => setLightbox(null)
+
+  const lightboxPrev = () => {
+    setLightbox((prev) => prev && ({
+      ...prev,
+      index: (prev.index - 1 + prev.images.length) % prev.images.length,
+    }))
+  }
+
+  const lightboxNext = () => {
+    setLightbox((prev) => prev && ({
+      ...prev,
+      index: (prev.index + 1) % prev.images.length,
+    }))
+  }
+
+  const selected = projects[activeIdx]
+
+  return (
+    <section id="projects" className="projects">
+      <h2 className="section-title">My Projects</h2>
+      <p className="section-subtitle">Academic work I have been part of</p>
+
+      <div className="projects-layout">
+        {/* LEFT — selected project details */}
+        <div className="project-details" key={activeIdx}>
+          <div className="project-details-icon" style={{ color: selected.color }}>
+            {selected.icon}
+          </div>
+          <h3 className="project-details-title">{selected.title}</h3>
+          <span className="project-subject">{selected.subject}</span>
+          <p className="project-details-desc">{selected.description}</p>
+          <div className="project-tools">
+            {selected.tools.map((tool) => (
+              <span className="tool-tag" key={tool}>{tool}</span>
+            ))}
+          </div>
+        </div>
+
+        {/* RIGHT — two-card carousel */}
+        <div className="carousel-wrapper">
+          <div className="carousel-track" key={activeIdx}>
+            {/* Left card — larger, active with slideshow */}
+            <CarouselCard
+              project={projects[activeIdx]}
+              isActive={true}
+              size="primary"
+              animClass=""
+              onClick={null}
+              onImageClick={openLightbox}
+            />
+            {/* Right card — smaller, next up, clickable */}
+            <CarouselCard
+              project={projects[nextIdx]}
+              isActive={false}
+              size="secondary"
+              animClass="carousel-enter-from-right"
+              onClick={handleNext}
+            />
+          </div>
+
+          {/* Navigation row: dots + next button */}
+          <div className="carousel-nav">
+            <div className="carousel-dots">
+              {projects.map((_, i) => (
+                <span
+                  key={i}
+                  className={`carousel-dot ${i === activeIdx ? 'active' : ''}`}
+                />
+              ))}
+            </div>
+            <button className="carousel-next-btn" onClick={handleNext} aria-label="Next project">
+              &#8594;
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Lightbox modal ── */}
+      {lightbox && (
+        <div className="lightbox-overlay" onClick={closeLightbox}>
+          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+            <button className="lightbox-close" onClick={closeLightbox} aria-label="Close">&times;</button>
+            <button className="lightbox-arrow lightbox-arrow-left" onClick={lightboxPrev} aria-label="Previous">&#8249;</button>
+            <img
+              src={lightbox.images[lightbox.index]}
+              alt={`${selected.title} screenshot ${lightbox.index + 1}`}
+              className="lightbox-img"
+              draggable={false}
+            />
+            <button className="lightbox-arrow lightbox-arrow-right" onClick={lightboxNext} aria-label="Next">&#8250;</button>
+            <div className="lightbox-counter">{lightbox.index + 1} / {lightbox.images.length}</div>
+          </div>
+        </div>
+      )}
+    </section>
+  )
+}
+
 function Skills() {
   return (
     <section id="skills" className="skills">
@@ -593,6 +930,7 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
+        <Projects />
         <Skills />
         <ContactAndComments />
       </main>

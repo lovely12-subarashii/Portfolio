@@ -162,6 +162,34 @@ main,
   -webkit-text-fill-color: transparent;
 }
 
+/* Dark mode: sync L color with nav gradient (8s cycle, same as navGradientSlide).
+   Nav gradient at the L position (far-left):
+     0%-28%  → pink band passing over L  → L = metallic black for contrast
+     28%-35% → pink fading, dark arriving → transition
+     35%-95% → dark behind L             → L = metallic pink for contrast
+     95%-100%→ dark fading, pink about to jump back → transition back */
+:root[data-theme="dark"] .logo-l {
+  animation: logoColorShiftDark 8s linear infinite;
+}
+
+@keyframes logoColorShiftDark {
+  /* pink bg is behind L → show metallic black L */
+  0%   { background-image: linear-gradient(180deg, #555 0%, #111 30%, #777 50%, #111 70%, #555 100%); }
+  25%  { background-image: linear-gradient(180deg, #555 0%, #111 30%, #777 50%, #111 70%, #555 100%); }
+  /* transition to metallic pink as dark bg arrives */
+  35%  { background-image: linear-gradient(180deg, #e8a0bf 0%, #ac4f82 30%, #f2c4d6 50%, #ac4f82 70%, #e8a0bf 100%); }
+  /* metallic pink while dark bg is behind L */
+  93%  { background-image: linear-gradient(180deg, #e8a0bf 0%, #ac4f82 30%, #f2c4d6 50%, #ac4f82 70%, #e8a0bf 100%); }
+  /* snap back to metallic black as pink bg jumps back at loop */
+  100% { background-image: linear-gradient(180deg, #555 0%, #111 30%, #777 50%, #111 70%, #555 100%); }
+}
+
+/* Light mode: no pink/black band, just keep metallic pink */
+[data-theme="light"] .logo-l {
+  animation: none;
+  background-image: linear-gradient(180deg, #e8a0bf 0%, #ac4f82 30%, #f2c4d6 50%, #ac4f82 70%, #e8a0bf 100%);
+}
+
 .logo-r { color: var(--pink); }
 .logo-m { color: var(--light-pink); }
 
@@ -466,6 +494,379 @@ section {
   font-size: 0.8rem;
   color: var(--text-dim);
   white-space: nowrap;
+}
+
+/* ─── Projects ─── */
+.projects {
+  padding-top: 3rem;
+}
+
+/* split layout: description left, carousel right */
+.projects-layout {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+  margin-left: -2rem;
+  padding-left: 0;
+}
+
+/* ── Left: project details ── */
+.project-details {
+  width: 320px;
+  flex-shrink: 0;
+  min-width: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem 1.75rem;
+  animation: detailsFadeIn 0.35s ease;
+  transition: background 0.4s, border-color 0.4s;
+}
+
+@keyframes detailsFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.project-details-icon {
+  font-size: 3.2rem;
+  margin-bottom: 1rem;
+}
+
+.project-details-title {
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+  transition: color 0.4s;
+}
+
+.project-subject {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(236, 72, 153, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  margin-bottom: 0.9rem;
+}
+
+[data-theme="light"] .project-subject {
+  background: rgba(214, 51, 108, 0.1);
+}
+
+.project-details-desc {
+  font-size: 1rem;
+  color: var(--text-dim);
+  line-height: 1.8;
+  margin-bottom: 1.2rem;
+}
+
+.project-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.tool-tag {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  padding: 0.3rem 0.7rem;
+  border-radius: 8px;
+  transition: border-color 0.25s, color 0.25s, background 0.4s;
+}
+
+/* ── Right: carousel (2 cards) ── */
+.carousel-wrapper {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.carousel-track {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  width: 100%;
+  justify-content: center;
+}
+
+/* carousel card base — landscape */
+.carousel-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease, opacity 0.4s ease, background 0.4s;
+}
+
+/* static thumbnail */
+.carousel-thumb {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  object-fit: cover;
+  display: block;
+}
+
+/* icon fallback (no images) */
+.carousel-card-icon {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-card-label {
+  font-weight: 600;
+  color: var(--text-dim);
+  line-height: 1.25;
+  padding: 0.5rem 0.6rem;
+  width: 100%;
+  background: var(--bg-card);
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Primary card (left) — large landscape, active with slideshow ── */
+.carousel-primary {
+  width: 440px;
+  height: 300px;
+  flex-shrink: 0;
+  border-color: var(--accent);
+  box-shadow: 0 12px 45px var(--shadow-accent);
+}
+
+.carousel-primary .carousel-card-label {
+  color: var(--text);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.55rem 0.6rem;
+}
+
+.carousel-primary .carousel-card-icon {
+  font-size: 3.5rem;
+}
+
+/* ── Secondary card (right) — smaller landscape, clickable ── */
+.carousel-secondary {
+  width: 260px;
+  height: 200px;
+  opacity: 0.55;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.carousel-secondary .carousel-card-label {
+  font-size: 0.72rem;
+  padding: 0.4rem 0.45rem;
+}
+
+.carousel-secondary .carousel-card-icon {
+  font-size: 2rem;
+}
+
+.carousel-secondary:hover {
+  opacity: 0.9;
+  border-color: var(--accent);
+  transform: scale(1.03);
+}
+
+/* ── Vertical slideshow (inside primary card) ── */
+.v-slideshow {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.v-slideshow-track {
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  height: 100%;
+}
+
+.v-slideshow-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* ── Slide-in animation (from right) ── */
+@keyframes slideFromRight {
+  from { transform: translateX(80px) scale(0.88); opacity: 0; }
+  to   { transform: translateX(0) scale(1); opacity: 0.55; }
+}
+
+.carousel-enter-from-right {
+  animation: slideFromRight 0.4s ease;
+}
+
+/* ── Carousel navigation row ── */
+.carousel-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.carousel-dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.carousel-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.3s, transform 0.3s;
+}
+
+.carousel-dot.active {
+  background: var(--accent);
+  transform: scale(1.35);
+}
+
+.carousel-next-btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, transform 0.25s;
+  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+}
+
+.carousel-next-btn:hover {
+  transform: scale(1.1);
+  background: var(--accent-hover, var(--accent));
+}
+
+/* ── Lightbox (full-size image popup) ── */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: lightboxFadeIn 0.25s ease;
+  backdrop-filter: blur(6px);
+}
+
+@keyframes lightboxFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.lightbox-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.lightbox-img {
+  max-width: 85vw;
+  max-height: 82vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.6);
+  object-fit: contain;
+  animation: lightboxZoomIn 0.3s ease;
+}
+
+@keyframes lightboxZoomIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: -10px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2.2rem;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.75;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.lightbox-close:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
+.lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 2.5rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.lightbox-arrow:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lightbox-arrow-left {
+  left: -60px;
+}
+
+.lightbox-arrow-right {
+  right: -60px;
+}
+
+.lightbox-counter {
+  position: absolute;
+  bottom: -36px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 /* ─── Skills ─── */
@@ -798,6 +1199,30 @@ section {
     gap: 1.5rem;
   }
 
+  .projects-layout {
+    flex-direction: column;
+    margin-left: 0;
+    align-items: stretch;
+  }
+
+  .project-details {
+    width: 100%;
+  }
+
+  .carousel-wrapper {
+    width: 100%;
+  }
+
+  .carousel-primary {
+    width: 320px;
+    height: 220px;
+  }
+
+  .carousel-secondary {
+    width: 180px;
+    height: 145px;
+  }
+
   .contact-comments-section { flex-direction: column; }
 
   .contact-panel {
@@ -837,6 +1262,20 @@ section {
   }
 
   .about-landscape-right { gap: 1rem; }
+
+  .carousel-primary {
+    width: 220px;
+    height: 160px;
+  }
+
+  .carousel-secondary {
+    width: 130px;
+    height: 110px;
+  }
+
+  .carousel-track {
+    gap: 0.5rem;
+  }
 
   .skills-grid {
     grid-template-columns: repeat(2, 1fr);
