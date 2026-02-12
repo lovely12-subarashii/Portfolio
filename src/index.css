@@ -307,8 +307,8 @@ section {
 .hero-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 3rem;
+  justify-content: center;
+  gap: 4rem;
 }
 
 .hero-content {
@@ -371,26 +371,19 @@ section {
 
 .btn:hover { transform: translateY(-2px); }
 
-.btn-primary {
-  background: var(--gradient);
-  color: #fff;
-  border: none;
-  box-shadow: 0 4px 24px var(--shadow-accent);
-}
-
-.btn-primary:hover {
-  box-shadow: 0 6px 32px var(--shadow-accent-hover);
-}
-
+.btn-primary,
 .btn-outline {
   border: 2px solid var(--border);
   color: var(--text);
   background: transparent;
+  transition: border-color 0.3s, color 0.3s, box-shadow 0.3s, transform 0.25s;
 }
 
+.btn-primary:hover,
 .btn-outline:hover {
   border-color: var(--accent);
   color: var(--accent-light);
+  box-shadow: 0 0 14px var(--shadow-accent), 0 0 30px rgba(236, 72, 153, 0.12);
 }
 
 /* ─── Hero Image ─── */
@@ -408,11 +401,20 @@ section {
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
   font-family: var(--font-vector);
   font-size: 3rem;
   font-weight: 800;
   letter-spacing: 4px;
   color: #fff;
+}
+
+.hero-profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
   position: relative;
   z-index: 1;
   box-shadow: 0 12px 48px var(--shadow-accent);
@@ -1157,10 +1159,18 @@ section {
     padding: 2rem;
     gap: 1.5rem;
     transform: translateY(-120%);
-    transition: transform 0.35s ease;
+    transition: transform 0.35s ease, visibility 0s 0.35s;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 999;
   }
 
-  .nav-links.active { transform: translateY(0); }
+  .nav-links.active {
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform 0.35s ease, visibility 0s 0s;
+  }
   .nav-toggle { display: block; }
 
   .hero { padding-top: calc(var(--nav-h) + 2rem); }

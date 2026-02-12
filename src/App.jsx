@@ -86,14 +86,14 @@ const skills = [
 
 const projects = [
   {
-    icon: <FaCoffee />,
-    title: 'POS CoffeeShop System',
-    subject: 'System Analysis & Design',
+    icon: <FaIdBadge />,
+    title: 'NFC-Based Campus Entry',
+    subject: 'Capstone 2',
     description:
-      'A Point-of-Sale system for a coffee shop built as a class project. I was in charge of the entire UI design, crafting clean and intuitive layouts using Canva to ensure a smooth ordering experience.',
-    tools: ['Canva', 'UI Design'],
-    color: '#6F4E37',
-    images: ['/images/pos-1.png', '/images/pos-2.png', '/images/pos-3.png'],
+      'An NFC-powered campus entry and attendance system for streamlined access control. I was responsible for the UI design and contributed to the frontend implementation using HTML and CSS.',
+    tools: ['UI Design', 'HTML', 'CSS', 'NFC', 'Frontend'],
+    color: '#9B59B6',
+    images: ['/images/nfc-1.png', '/images/nfc-2.png', '/images/nfc-3.png'],
   },
   {
     icon: <FaBriefcase />,
@@ -106,6 +106,16 @@ const projects = [
     images: ['/images/jobseek-1.png', '/images/jobseek-2.png', '/images/jobseek-3.png'],
   },
   {
+    icon: <FaCoffee />,
+    title: 'POS CoffeeShop System',
+    subject: 'System Analysis & Design',
+    description:
+      'A Point-of-Sale system for a coffee shop built as a class project. I was in charge of the entire UI design, crafting clean and intuitive layouts using Canva to ensure a smooth ordering experience.',
+    tools: ['Canva', 'UI Design'],
+    color: '#6F4E37',
+    images: ['/images/pos-1.png', '/images/pos-2.png', '/images/pos-3.png'],
+  },
+  {
     icon: <FaTooth />,
     title: 'Dental Clinic CRM System',
     subject: 'Capstone 1',
@@ -114,16 +124,6 @@ const projects = [
     tools: ['UI Design', 'HTML', 'CSS', 'Frontend'],
     color: '#2ECC71',
     images: [],
-  },
-  {
-    icon: <FaIdBadge />,
-    title: 'NFC-Based Campus Entry',
-    subject: 'Capstone 2',
-    description:
-      'An NFC-powered campus entry and attendance system for streamlined access control. I was responsible for the UI design and contributed to the frontend implementation using HTML and CSS.',
-    tools: ['UI Design', 'HTML', 'CSS', 'NFC', 'Frontend'],
-    color: '#9B59B6',
-    images: ['/images/nfc-1.png', '/images/nfc-2.png', '/images/nfc-3.png'],
   },
 ]
 
@@ -552,7 +552,7 @@ function Hero() {
 
         <div className="hero-image-wrapper">
           <div className="hero-image-placeholder">
-            <span>LRM</span>
+            <img src="/images/profile.png" alt="Lovely Rose" className="hero-profile-img" draggable={false} />
           </div>
           <div className="hero-image-glow" />
         </div>
